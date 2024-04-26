@@ -1,3 +1,56 @@
+# How to use -- Rui Li
+## Build and Run Docker
+First turn on Docker Daemon (open the Docker App)
+```
+# This image is updated with the correct packages
+docker pull zzweeee/dockerhub:llmft_updated
+```
+Optionally, tag the image with:
+1. First find the image id
+```commandline
+$ docker images -a
+REPOSITORY          TAG             IMAGE ID       CREATED      SIZE
+zzweeee/dockerhub   llmft_updated   efa258f98de3     ...       15.3GB
+```
+2. Then tag the image:
+```commandline
+$ docker tag zzweeee/dockerhub:llmft_updated llmft:updated
+```
+**CD into the project directory** and run the docker
+`$ docker run -it --rm --gpus=all --pid=host --ipc=host --user Sheng     -v /$PWD:/llmft   llmft:updated`
+
+## Run Code
+### Set up the env variables with
+```
+source ./scripts/misc/setup.sh
+```
+`source` is necessary because it saves the env variables in the current shell session 
+### Run example: facebook/opt-125m, cola
+```commandline
+bash scripts/in_context/cola/run_minimal.sh cola 2 facebook/opt-125m 0 12345
+```
+Logs will be saved under the `logfiles` directory. 
+### Run a downloaded model
+1. Download a model from MetaICL's checkpoint and save under the project root directory `./model.pt`.
+2. In `run_minimal.sh`, add two more arguments after `--model_name_or_path $model_name_or_path \`
+```commandline
+--model_name_or_path $model_name_or_path \
+--config_name gpt2-large \
+--tokenizer_name gpt2-large \
+```
+Since the MetaICL model are gpt-large, we need to specify its corresponding config_name and tokenizer_name.
+3. Run the script while replacing the model argument to `model.pt`
+```commandline
+bash scripts/in_context/cola/run_minimal.sh cola 2 model.pt 0 12345
+```
+
+### Code Inperfections
+When using the local gpt2 model, a wrapper is applied to it in `models/local_gpt2_wrapper.py` where we only take the
+transformer output and add a linear "score" layer that manually projects to `vocab_size` dimension. This layer is untrained (while the rest of the model is trained by MetaICL),
+which can make the final projection result really bad. We should revise the code to use the decoder output. The current wrapper
+is written this way because we referenced the gptj wrapper class. But looking at the opt wrapper class, they use decoder output
+which makes more sense.
+
 # Few-shot Fine-tuning vs. In-context Learning: A Fair Comparison and Evaluation
 
 ## Marius Mosbach, Tiago Pimentel, Shauli Ravfogel, Dietrich Klakow, Yanai Elazar

@@ -963,9 +963,6 @@ class FtTrainer(Trainer):
         observed_num_examples = 0
         # Main evaluation loop
         for step, inputs in enumerate(dataloader):
-            # print("@@@@@ inputssssss in evalloop ", inputs)
-            # print("@@@@@ max ", torch.max(inputs))
-            # print("@@@@@ min ", torch.min(inputs))
             # Update the observed num examples
             observed_batch_size = find_batch_size(inputs)
             if observed_batch_size is not None:
@@ -1178,18 +1175,9 @@ class FtTrainer(Trainer):
         else:
             labels = None
 
-        print("inputs keys ", inputs.keys())
-        print("@@@@@@@@ labels ", has_labels)
-        print("self.label_names ", self.label_names)
-        for k in self.label_names:
-            print(inputs.get(k))
-        print("loss_without_labels ", loss_without_labels)
         with torch.no_grad():
             if has_labels or loss_without_labels:
                 with self.compute_loss_context_manager():
-                    print("@@@@@@@@@@@@@@@@@@ inputs len ", len(inputs.keys()))
-                    for k in inputs.keys():
-                        print("@@@@@@@ ", k, ": ", inputs[k])
                     loss, outputs = self.compute_loss(
                         model, inputs, return_outputs=True)
                 loss = loss.mean().detach()

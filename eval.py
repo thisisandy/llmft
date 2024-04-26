@@ -52,12 +52,14 @@ from eval_utils import create_few_shot_context, add_context_to_dataset, _select_
 from models.opt_wrapper import OPTWithLMClassifier
 from models.llama_wrapper import LlamaWithLMClassifier
 from models.gptneox_wrapper import GPTNeoXWithLMClassifier
+from models.gptj_wrapper import GPTJWithClassifier
+from models.local_gpt2_wrapper import GPT2Classifier
 
 
 logger = logging.getLogger(__name__)
 
 
-def _load_model(model_args):
+def _load_model(model_args, device=None):
     config = AutoConfig.from_pretrained(
         model_args.config_name if model_args.config_name else model_args.model_name_or_path,
         cache_dir=model_args.cache_dir,
@@ -80,6 +82,8 @@ def _load_model(model_args):
     config.use_soft_prompt = False
     config.num_soft_prompt_tokens = None
 
+    print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!", model_args.tokenizer_name)
+
     tokenizer = AutoTokenizer.from_pretrained(
         model_args.tokenizer_name if model_args.tokenizer_name else model_args.model_name_or_path,
         cache_dir=model_args.cache_dir,
@@ -89,6 +93,7 @@ def _load_model(model_args):
     )
 
     if "facebook/opt" in model_args.model_name_or_path:
+        from transformers import AutoModelForCausalLM
 
         model = OPTWithLMClassifier.from_pretrained(
             model_args.model_name_or_path,
@@ -99,6 +104,8 @@ def _load_model(model_args):
             use_auth_token=True if model_args.use_auth_token else None,
             ignore_mismatched_sizes=model_args.ignore_mismatched_sizes,
         )
+        print("@@@@ model: ", model)
+
 
     # elif "gpt-j" in model_args.model_name_or_path:
     #     # We need to add a padding token for gpt-j
@@ -142,6 +149,38 @@ def _load_model(model_args):
             config.pad_token_id)  # let's use the <unk> token
         tokenizer.padding_side = "right"
 
+    elif model_args.model_name_or_path == "model.pt":
+        from transformers import AutoModelForCausalLM
+        print("@@@@@@@@@@ loading state dict")
+        # device = torch.device("cuda")
+        print("device ", device)
+        state_dict = torch.load(model_args.model_name_or_path, map_location=device)
+        # state_dict = torch.load(model_args.model_name_or_path)
+
+        config.num_labels = config.vocab_size
+        print("@@@@@@@@@@ state dict loaded !!!!")
+        model = GPT2Classifier.from_pretrained("gpt2-large", state_dict=state_dict,
+                                                     from_tf=False,
+                                                     config=config,
+                                                     cache_dir=model_args.cache_dir,
+                                                     revision=model_args.model_revision,
+                                                     use_auth_token=True if model_args.use_auth_token else None,
+                                                     ignore_mismatched_sizes=model_args.ignore_mismatched_sizes,
+                                                     torch_dtype=torch.float16,)
+        # model.to(device)
+        del state_dict
+        # tokenizer.pad_token = tokenizer._convert_id_to_token(
+        #     config.pad_token_id)  # let's use the <unk> token
+        # tokenizer.padding_side = "right"
+
+        tokenizer.pad_token = tokenizer.eos_token
+        model.config.pad_token_id = tokenizer.convert_tokens_to_ids(
+            tokenizer.pad_token)
+        tokenizer.padding_side = "right"
+
+    print("@@@@ model: ", model)
+    print("@@@@@@@@@@ model created !!!!")
+    print("@@@@@@@@@@ congif ", config)
     return config, tokenizer, model
 
 
@@ -256,7 +295,7 @@ def main():
 
     # ------------------ load model -------------------
 
-    config, tokenizer, model = _load_model(model_args)
+    config, tokenizer, model = _load_model(model_args, device=training_args.device)
 
     # -------------------------------------------------
 
@@ -588,6 +627,7 @@ def main():
 
         all_results = {}
         for task_name, dataset in zip(eval_task_names, eval_datasets):
+            print("!!!!!!!!!!!!!!!!!!!!data shape", dataset.shape)
             outputs = trainer.predict(
                 dataset, metric_key_prefix=task_name, ignore_keys=["past_key_values"])
             predictions = outputs.predictions

@@ -31,6 +31,9 @@ SUPPORTED_MODELS = [
     "EleutherAI/pythia-6.9b",
     "EleutherAI/pythia-12b",
     "EleutherAI/pythia-12b-deduped",
+
+    # Path to local model
+    "model.pt"
 ]
 
 
