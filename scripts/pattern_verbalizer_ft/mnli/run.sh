@@ -63,6 +63,6 @@ do
             --data_seed $data_seed \
             --deepspeed $PROJECT_DIR/deepspeed_configs/ds_config_zero3.json \
             --deepspeed_stage 3 \
-            --report_to "none"
+            --report_to "none" 
     done
 done

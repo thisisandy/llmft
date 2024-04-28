@@ -622,7 +622,7 @@ class FtTrainer(Trainer):
         self.control = self.callback_handler.on_train_begin(
             args, self.state, self.control
         )
-
+        eval_matrices = { }
         # Skip the first epochs_trained epochs to get the random state of the dataloader at the right point.
         if not args.ignore_data_skip:
             for epoch in range(epochs_trained):
@@ -797,9 +797,9 @@ class FtTrainer(Trainer):
                         args, self.state, self.control
                     )
 
-                    self._maybe_log_save_evaluate(
+                    eval_matrices.update(self._maybe_log_save_evaluate(
                         tr_loss, model, trial, epoch, ignore_keys_for_eval
-                    )
+                    ))
                 else:
                     self.control = self.callback_handler.on_substep_end(
                         args, self.state, self.control
@@ -818,10 +818,10 @@ class FtTrainer(Trainer):
             self.control = self.callback_handler.on_epoch_end(
                 args, self.state, self.control
             )
-            self._maybe_log_save_evaluate(
+            eval_matrices.update(self._maybe_log_save_evaluate(
                 tr_loss, model, trial, epoch, ignore_keys_for_eval
-            )
-
+            ))
+            
             if DebugOption.TPU_METRICS_DEBUG in self.args.debug:
                 if is_torch_tpu_available():
                     # tpu-comment: Logging debug metrics for PyTorch/XLA (compile, execute times, ops, etc.)
@@ -872,6 +872,9 @@ class FtTrainer(Trainer):
 
         self.log(metrics)
 
+        self.log(eval_matrices)
+
+        self.save_metrics("eval", eval_matrices)
 
         self.control = self.callback_handler.on_train_end(
             args, self.state, self.control
@@ -930,7 +933,7 @@ class FtTrainer(Trainer):
 
             self.log(logs)
 
-        metrics = None
+        eval_metrics = {}
         if self.control.should_evaluate:
             if isinstance(self.eval_dataset, dict):
                 for eval_dataset_name, eval_dataset in self.eval_dataset.items():
@@ -939,13 +942,16 @@ class FtTrainer(Trainer):
                         ignore_keys=ignore_keys_for_eval,
                         metric_key_prefix=f"eval_{eval_dataset_name}",
                     )
+                    eval_metrics.update({f"eval_{eval_dataset_name}": metrics})
             else:
                 metrics = self.evaluate(ignore_keys=ignore_keys_for_eval)
+                eval_metrics.update({"eval": metrics})
         if self.control.should_save:
-            self._save_checkpoint(model, trial, metrics=metrics)
+            self._save_checkpoint(model, trial, metrics=eval_metrics)
             self.control = self.callback_handler.on_save(
                 self.args, self.state, self.control
             )
+        return eval_metrics
 
     def evaluate(
         self,
