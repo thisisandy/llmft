@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-OUTPUT_DIR=/logfiles/in_context_eval
+# OUTPUT_DIR=/logfiles/in_context_eval
 mkdir -p $OUTPUT_DIR
 
 # args: task_name, num_shots, model_name_or_path
