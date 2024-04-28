@@ -307,13 +307,11 @@ def main():
             additional_evaluation_datasets[subset_name] = paws_qqp_subset
 
     elif data_args.eval_task_name == "cola-ood":
-        for label in [0, 1]:
-            cola_ood_subset, subset_name = load_cola_ood_dataset(
-                data_args.eval_task_path,
-                label=label,
-                cache_dir=data_args.dataset_cache_dir,
-            )
-            additional_evaluation_datasets[subset_name] = cola_ood_subset
+        cola_ood_subset, subset_name = load_cola_ood_dataset(
+            data_args.eval_task_path,
+            cache_dir=data_args.dataset_cache_dir,
+        )
+        additional_evaluation_datasets[subset_name] = cola_ood_subset
 
     # -------------------------------------------------
 
