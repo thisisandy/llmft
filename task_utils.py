@@ -134,12 +134,13 @@ def load_glue_datasets(data_args, model_args):
                 features)  # overwrite old features
             
         else:
+            print(f"Loading {data_args.task_name} dataset")
             # Downloading and loading a dataset from the hub.
             raw_datasets = load_dataset(
                 "glue",
                 data_args.task_name,
-                cache_dir=data_args.dataset_cache_dir,
-                use_auth_token=True if model_args.use_auth_token else None,
+                # cache_dir=data_args.dataset_cache_dir,
+                # use_auth_token=True if model_args.use_auth_token else None,
             )
 
             if data_args.task_name == "qqp":

@@ -22,7 +22,6 @@ logger = logging.get_logger(__name__)
 
 class GPT2Classifier(GPT2ForSequenceClassification):
     def __init__(self, config):
-        print("")
         super().__init__(config)
 
     def forward(

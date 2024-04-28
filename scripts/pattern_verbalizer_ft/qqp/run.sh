@@ -2,6 +2,7 @@
 
 # args: task_name, max_train_samples, epochs, warmup_ratio, bsz, num_gpus, learning_rate, model_name_or_path, port
 
+task_name=$1
 max_train_samples=$2
 epochs=$3
 warmup_ratio=$4
@@ -10,6 +11,9 @@ num_gpus=$6
 learning_rate=$7
 model_name_or_path=$8
 port=$9
+
+echo $model_name_or_path
+echo $port
 
 # we log at the end of every epoch
 logging_steps=$((max_train_samples / (bsz * num_gpus)))
@@ -25,10 +29,10 @@ logging_steps=$((max_train_samples / (bsz * num_gpus)))
 
 for seed in "0"
 do
-    for data_seed in "0" "1" "2" "3" "4" "5" "6" "7" "8" "9"
+    for data_seed in "0" 
     do
         $PYTHON_BIN/deepspeed \
-            --include localhost:0,1,2,3,4,5,6,7 \
+            --include localhost:0 \
             --master_port $port \
             $PROJECT_DIR/ft.py \
             --wandb_project_name llmft-experiments \

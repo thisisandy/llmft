@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-
+# 
 # args: task_name, max_train_samples, epochs, warmup_ratio, bsz, num_gpus, learning_rate, model_name_or_path, port
 
 max_train_samples=$2
@@ -25,10 +25,10 @@ logging_steps=$((max_train_samples / (bsz * num_gpus)))
 
 for seed in "0"
 do
-    for data_seed in "0" "1" "2" "3" "4" "5" "6" "7" "8" "9"
+    for data_seed in "0"
     do
         deepspeed \
-            --include localhost:0,1,2,3,4,5,6,7 \
+            --include localhost:0 \
             --master_port $port \
             $PROJECT_DIR/ft.py \
             --wandb_project_name llmft-experiments \
