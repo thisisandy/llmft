@@ -3,7 +3,7 @@
 # Define base model and script parameters
 model="facebook/opt-125m"
 learning_rate=0.00001
-epochs=1
+epochs=40
 max_train_samples=160
 warmup_ratio=0.1
 bsz=32
@@ -26,19 +26,20 @@ script_paths[in_context]="./scripts/in_context"
 
 # Function to run script and log status
 run_script() {
-    local task=$1
-    local script=$2
-    local log_file="$log_dir/$task-$(basename $script).log"
-
-    # Run the script and capture exit status
-    bash $script $task $@ 3>&1 1>>$log_file 2>&1
+    local script=$1
+    local task=$2
+    shift 2  # Shift the first two arguments to get additional arguments for the script
+    # Print to terminal about the script being run
+    echo "Running $script for task $task with parameters $@"
+    # Run the script without redirecting standard output or standard error
+    bash "$script" "$task" "$@"
+    # Capture the exit status of the script
     local status=$?
-
-    # Log success or failure
+    # Log success or failure based on the exit status
     if [ $status -eq 0 ]; then
-        echo "$script on $task: SUCCESS" >> $status_file
+        echo "$script on $task: SUCCESS" >> "$status_file"
     else
-        echo "$script on $task: FAILED with status $status" >> $status_file
+        echo "$script on $task: FAILED with status $status" >> "$status_file"
     fi
 }
 
@@ -46,13 +47,11 @@ run_script() {
 for task in "${tasks[@]}"; do
     # in_context scripts
     script="${script_paths[in_context]}/$task/run_minimal.sh"
-    run_script $task $script $bsz $model $num_gpus $port
+    run_script "$script" "$task" "$bsz" "$model" "$num_gpus" "$port"
 
     # verbalexpr_ft and vanilla_ft scripts
-    for type in verbalexpr_ft vanilla_ft; do
+    for type in "verbalexpr_ft" "vanilla_ft"; do
         script="${script_paths[$type]}/$task/run.sh"
-        run_script $task $script $max_train_samples $epochs $warmup_ratio $bsz $num_gpus $learning_rate $model $port
+        run_script "$script" "$task" "$max_train_samples" "$epochs" "$warmup_ratio" "$bsz" "$num_gpus" "$learning_rate" "$model" "$port"
     done
-
-
 done
