@@ -261,6 +261,7 @@ class FtTrainer(Trainer):
         ft_args: FtArguments = None,
         eval_only: bool = False,
     ):
+        
         super().__init__(
             model,
             args,
@@ -871,6 +872,7 @@ class FtTrainer(Trainer):
 
         self.log(metrics)
 
+
         self.control = self.callback_handler.on_train_end(
             args, self.state, self.control
         )
@@ -939,7 +941,6 @@ class FtTrainer(Trainer):
                     )
             else:
                 metrics = self.evaluate(ignore_keys=ignore_keys_for_eval)
-
         if self.control.should_save:
             self._save_checkpoint(model, trial, metrics=metrics)
             self.control = self.callback_handler.on_save(
