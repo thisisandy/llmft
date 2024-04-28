@@ -1,0 +1,19 @@
+{
+    "epoch": 20.0,
+    "eval_cola": {
+        "epoch": 20.0,
+        "eval_cola_loss": 1.5408129692077637,
+        "eval_cola_matthews_correlation": -0.005930985286109681,
+        "eval_cola_runtime": 9.7005,
+        "eval_cola_samples_per_second": 107.521,
+        "eval_cola_steps_per_second": 10.824
+    },
+    "eval_cola-ood": {
+        "epoch": 20.0,
+        "eval_cola-ood_loss": 1.517443060874939,
+        "eval_cola-ood_matthews_correlation": -0.008895033955029863,
+        "eval_cola-ood_runtime": 4.7629,
+        "eval_cola-ood_samples_per_second": 108.337,
+        "eval_cola-ood_steps_per_second": 10.918
+    }
+}

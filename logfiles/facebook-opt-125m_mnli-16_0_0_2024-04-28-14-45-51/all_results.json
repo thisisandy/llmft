@@ -1,0 +1,32 @@
+{
+    "epoch": 20.0,
+    "eval_hans-lexical_overlap-contradiction": {
+        "epoch": 20.0,
+        "eval_hans-lexical_overlap-contradiction_accuracy": 0.879,
+        "eval_hans-lexical_overlap-contradiction_loss": 0.276123046875,
+        "eval_hans-lexical_overlap-contradiction_runtime": 44.6373,
+        "eval_hans-lexical_overlap-contradiction_samples_per_second": 112.014,
+        "eval_hans-lexical_overlap-contradiction_steps_per_second": 11.201
+    },
+    "eval_hans-lexical_overlap-entailment": {
+        "epoch": 20.0,
+        "eval_hans-lexical_overlap-entailment_accuracy": 0.1282,
+        "eval_hans-lexical_overlap-entailment_loss": 2.46484375,
+        "eval_hans-lexical_overlap-entailment_runtime": 44.5047,
+        "eval_hans-lexical_overlap-entailment_samples_per_second": 112.348,
+        "eval_hans-lexical_overlap-entailment_steps_per_second": 11.235
+    },
+    "eval_mnli": {
+        "epoch": 20.0,
+        "eval_mnli_accuracy": 0.492080095636581,
+        "eval_mnli_loss": 2.787109375,
+        "eval_mnli_runtime": 59.5495,
+        "eval_mnli_samples_per_second": 112.377,
+        "eval_mnli_steps_per_second": 11.251
+    },
+    "train_loss": 0.17577049732208253,
+    "train_runtime": 3053.5278,
+    "train_samples": 16,
+    "train_samples_per_second": 0.105,
+    "train_steps_per_second": 0.052
+}

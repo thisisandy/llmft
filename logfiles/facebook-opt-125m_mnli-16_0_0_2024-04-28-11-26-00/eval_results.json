@@ -1,0 +1,30 @@
+{
+    "epoch": 20.0,
+    "eval_hans-lexical_overlap-contradiction": {
+        "epoch": 20.0,
+        "eval_hans-lexical_overlap-contradiction_accuracy": 0.8804,
+        "eval_hans-lexical_overlap-contradiction_frac_non_target_tokens": 0.0,
+        "eval_hans-lexical_overlap-contradiction_loss": 0.263427734375,
+        "eval_hans-lexical_overlap-contradiction_runtime": 184.8113,
+        "eval_hans-lexical_overlap-contradiction_samples_per_second": 27.055,
+        "eval_hans-lexical_overlap-contradiction_steps_per_second": 2.705
+    },
+    "eval_hans-lexical_overlap-entailment": {
+        "epoch": 20.0,
+        "eval_hans-lexical_overlap-entailment_accuracy": 0.1026,
+        "eval_hans-lexical_overlap-entailment_frac_non_target_tokens": 0.0,
+        "eval_hans-lexical_overlap-entailment_loss": 3.05859375,
+        "eval_hans-lexical_overlap-entailment_runtime": 185.2071,
+        "eval_hans-lexical_overlap-entailment_samples_per_second": 26.997,
+        "eval_hans-lexical_overlap-entailment_steps_per_second": 2.7
+    },
+    "eval_mnli": {
+        "epoch": 20.0,
+        "eval_mnli_accuracy": 0.4931261207411835,
+        "eval_mnli_frac_non_target_tokens": 0.0,
+        "eval_mnli_loss": 4.515625,
+        "eval_mnli_runtime": 239.8721,
+        "eval_mnli_samples_per_second": 27.898,
+        "eval_mnli_steps_per_second": 2.793
+    }
+}

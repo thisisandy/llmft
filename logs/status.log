@@ -1,0 +1,9 @@
+./scripts/in_context/mnli/run_minimal.sh on mnli: SUCCESS
+./scripts/pattern_verbalizer_ft/mnli/run.sh on mnli: SUCCESS
+./scripts/vanilla_ft/mnli/run.sh on mnli: SUCCESS
+./scripts/in_context/cola/run_minimal.sh on cola: SUCCESS
+./scripts/pattern_verbalizer_ft/cola/run.sh on cola: FAILED with status 1
+./scripts/vanilla_ft/cola/run.sh on cola: SUCCESS
+./scripts/in_context/qqp/run_minimal.sh on qqp: FAILED with status 1
+./scripts/pattern_verbalizer_ft/qqp/run.sh on qqp: SUCCESS
+./scripts/vanilla_ft/qqp/run.sh on qqp: SUCCESS

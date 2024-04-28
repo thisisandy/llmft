@@ -1,0 +1,23 @@
+{
+    "epoch": 20.0,
+    "eval_paws-qqp": {
+        "epoch": 20.0,
+        "eval_paws-qqp_accuracy": 0.7134416543574594,
+        "eval_paws-qqp_f1-macro": 0.46965854761597103,
+        "eval_paws-qqp_f1-micro": 0.7134416543574594,
+        "eval_paws-qqp_loss": 1.5947265625,
+        "eval_paws-qqp_runtime": 6.1249,
+        "eval_paws-qqp_samples_per_second": 110.533,
+        "eval_paws-qqp_steps_per_second": 11.102
+    },
+    "eval_qqp": {
+        "epoch": 20.0,
+        "eval_qqp_accuracy": 0.617,
+        "eval_qqp_f1-macro": 0.40268153880464563,
+        "eval_qqp_f1-micro": 0.617,
+        "eval_qqp_loss": 2.796875,
+        "eval_qqp_runtime": 9.0328,
+        "eval_qqp_samples_per_second": 110.708,
+        "eval_qqp_steps_per_second": 11.071
+    }
+}

@@ -3,10 +3,10 @@
 # Define base model and script parameters
 model="facebook/opt-125m"
 learning_rate=0.00001
-epochs=40
-max_train_samples=160
+epochs=20
+max_train_samples=16
 warmup_ratio=0.1
-bsz=32
+bsz=2
 num_gpus=1
 port=8000
 log_dir="./logs"
@@ -46,8 +46,9 @@ run_script() {
 # Loop over tasks and script types
 for task in "${tasks[@]}"; do
     # in_context scripts
+    num_shots=4
     script="${script_paths[in_context]}/$task/run_minimal.sh"
-    run_script "$script" "$task" "$bsz" "$model" "$num_gpus" "$port"
+    run_script "$script" "$task" "$max_train_samples" "$model" "$num_gpus" "$port"
 
     # verbalexpr_ft and vanilla_ft scripts
     for type in "verbalexpr_ft" "vanilla_ft"; do
