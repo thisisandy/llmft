@@ -1,0 +1,21 @@
+{
+    "epoch": 20.0,
+    "eval_cola": {
+        "epoch": 20.0,
+        "eval_cola_frac_non_target_tokens": 0.0,
+        "eval_cola_loss": 2.16015625,
+        "eval_cola_matthews_correlation": 0.01507229022727477,
+        "eval_cola_runtime": 10.1646,
+        "eval_cola_samples_per_second": 102.611,
+        "eval_cola_steps_per_second": 10.33
+    },
+    "eval_cola-ood": {
+        "epoch": 20.0,
+        "eval_cola-ood_frac_non_target_tokens": 0.0,
+        "eval_cola-ood_loss": 2.134765625,
+        "eval_cola-ood_matthews_correlation": 0.004713881653860487,
+        "eval_cola-ood_runtime": 4.9092,
+        "eval_cola-ood_samples_per_second": 105.108,
+        "eval_cola-ood_steps_per_second": 10.592
+    }
+}
